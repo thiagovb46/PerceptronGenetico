@@ -12,7 +12,24 @@ classes_conjunto = classes[classes != 0]
 atributos_setosa = atributos[classes == 0]#ApenasSetosa
     
 classes_conjunto = np.where(classes_conjunto == 1, 1, -1)
-# Para cada individuo calcula a aptidao efetuando a calssificação do conjunto de treianmento
+
+#População inicial
+def inicializar_populacao(tamanho_populacao, dimensao_individuo):
+    populacao = []
+    for j in range(tamanho_populacao):
+        individuo = np.random.uniform(-1, 1, dimensao_individuo)
+        populacao.append(individuo)
+    return populacao
+
+# Mutação do filho
+def mutacao(individuo, taxa_mutacao):
+    #Verifica numero aleatório gerado e compara com a taxa de mutação para mutar o filho
+    for i in range(len(individuo)):
+        if np.random.rand() < taxa_mutacao:
+            individuo[i] = np.random.uniform(-1, 1)
+    return individuo
+
+# Para cada individuo calcula a aptidao EMQ
 def aptidao(individuo):
     pesos = individuo[:-1]
     viés = individuo[-1]
@@ -27,28 +44,12 @@ def aptidao(individuo):
     emq = erro_quadrado_total / atributos_treinamento.shape[0]
     return emq
 
-#População inicial
-def inicializar_populacao(tamanho_populacao, dimensao_individuo):
-    populacao = []
-    for j in range(tamanho_populacao):
-        individuo = np.random.uniform(-1, 1, dimensao_individuo)
-        populacao.append(individuo)
-    return populacao
-
 # Cruzamento dos pais selecionados
 def crossover(pai1, pai2):
     ponto_corte = np.random.randint(0, len(pai1))
     #Une pais de acordo com o ponto de corte definido
     filho = np.concatenate((pai1[:ponto_corte], pai2[ponto_corte:]))
     return filho
-
-# Mutação do filho
-def mutacao(individuo, taxa_mutacao):
-    #Verifica numero aleatório gerado e compara com a taxa de mutação para mutar o filho
-    for i in range(len(individuo)):
-        if np.random.rand() < taxa_mutacao:
-            individuo[i] = np.random.uniform(-1, 1)
-    return individuo
 
 for cont in range(9):
     if cont == 0:
@@ -77,20 +78,21 @@ for cont in range(9):
     np.random.seed(0)
     pesos = np.random.rand(atributos_treinamento.shape[1])
     viés = np.random.rand()
-    
+
     #Genético
     tamanho_populacao = 100
     dimensao_individuo = atributos_treinamento.shape[1] + 1  # +1 para o viés
     taxa_mutacao = 0.2
     num_geracoes = 200
-
     populacao = inicializar_populacao(tamanho_populacao, dimensao_individuo)
 
     for geracao in range(num_geracoes):
-        aptidoes = [aptidao(individuo) for individuo in populacao]
+        aptidoes = []
+        for individuo in populacao:
+            apt = aptidao(individuo)
+            aptidoes.append(apt);
         melhor_individuo = populacao[np.argmin(aptidoes)]
-
-        # populacao que contem apenas o melhor indivíduo
+        # populacao que contem apenas o melhor indivíduo, será a próxima populacao
         populacao_selecionada = [melhor_individuo]
         #Gera filhos 
         while len(populacao_selecionada) < tamanho_populacao:
@@ -108,7 +110,8 @@ for cont in range(9):
 
     pesos = melhor_pesos;
     viés = melhor_bias;
-    # Testes
+
+    # Execução de testes do classificador
     corretos = 0
     for i in range(tamanho_conjunto): #Tamanho conjunto de testes
         entrada = atributos_teste[i]
@@ -134,9 +137,7 @@ for cont in range(9):
 
     print("Teste "+str(cont+1))
     print("     Tamanho conjunto de teste:", proporcao_conn_teste)
-    print(" =======================================================")
-    print("     Acurácia no conjunto de teste %:", acuracia)
-
+    print("     Acurácia obtida no conjunto de teste %:", acuracia)
     print("Testes da terceira classe: ")
     print("Classificação da classe Setosa na versicolor ", versicolor/atributos_setosa.shape[0 * 100], "% ")
     print("Classificação da classe Setosa na virginica ", virginica/atributos_setosa.shape[0]* 100, "%")    
