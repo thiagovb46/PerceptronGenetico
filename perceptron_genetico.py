@@ -51,26 +51,13 @@ def crossover(pai1, pai2):
     filho = np.concatenate((pai1[:ponto_corte], pai2[ponto_corte:]))
     return filho
 
-for cont in range(9):
+for cont in range(3):
     if cont == 0:
         proporcao_conn_teste = 0.1
     if cont == 1:
         proporcao_conn_teste = 0.3
     if cont == 2:
         proporcao_conn_teste = 0.5
-    if cont == 3:
-        proporcao_conn_teste = 0.5
-    if cont == 4:
-        proporcao_conn_teste = 0.5
-    if cont == 5:
-        proporcao_conn_teste = 0.5
-    if cont == 6:
-        proporcao_conn_teste = 0.5
-    if cont == 7:
-        proporcao_conn_teste = 0.5
-    if cont == 8:
-        proporcao_conn_teste = 0.5
-
     # Divisão entre treinamento e teste
     atributos_treinamento, atributos_teste, classes_treinamento, classes_teste = train_test_split(atributos_do_conjunto, classes_conjunto, test_size=proporcao_conn_teste, random_state=42)
     tamanho_conjunto = atributos_teste.shape[0]
