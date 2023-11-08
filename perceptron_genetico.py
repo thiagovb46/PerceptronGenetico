@@ -25,7 +25,7 @@ def inicializar_populacao(tamanho_populacao, dimensao_individuo):
 def mutacao(individuo, taxa_mutacao):
     #Verifica numero aleatório gerado e compara com a taxa de mutação para mutar o filho
     for i in range(len(individuo)):
-        if np.random.rand() < taxa_mutacao:
+        if np.random.uniform(-1, 1) < taxa_mutacao: 
             individuo[i] = np.random.uniform(-1, 1)
     return individuo
 
@@ -51,7 +51,7 @@ def crossover(pai1, pai2):
     filho = np.concatenate((pai1[:ponto_corte], pai2[ponto_corte:]))
     return filho
 
-for cont in range(3):
+for cont in range(3):   
     if cont == 0:
         proporcao_conn_teste = 0.1
     if cont == 1:
@@ -68,7 +68,7 @@ for cont in range(3):
 
     #Genético
     tamanho_populacao = 100
-    dimensao_individuo = atributos_treinamento.shape[1] + 1  # +1 para o viés
+    dimensao_individuo = atributos_treinamento.shape[1] + 1  #Adiciona o viés na ultima posição
     taxa_mutacao = 0.2
     num_geracoes = 200
     populacao = inicializar_populacao(tamanho_populacao, dimensao_individuo)
