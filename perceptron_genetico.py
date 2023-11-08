@@ -7,10 +7,7 @@ atributos = iris.data
 classes = iris.target
 
 atributos_do_conjunto = atributos[classes != 0]
-classes_conjunto = classes[classes != 0]
-
-atributos_setosa = atributos[classes == 0]#ApenasSetosa
-    
+classes_conjunto = classes[classes != 0]    
 classes_conjunto = np.where(classes_conjunto == 1, 1, -1)
 
 #População inicial
@@ -108,24 +105,9 @@ for cont in range(3):
         if ativação == objetivo:
             corretos += 1
 
-    #Classifica setosa sem treinar com os pesos de treinamento anteriores
-    versicolor = 0
-    virginica = 0
-    for j in range(atributos_setosa.shape[0]):
-        entrada_setosa = atributos_setosa[i];
-        soma_ponderada_setosa = np.dot(entrada_setosa, pesos);
-        ativação_setosa = np.sign(soma_ponderada)
-        if ativação == -1:
-            versicolor += 1
-        else: 
-            virginica +=1
            
     acuracia = (corretos / tamanho_conjunto) * 100 #Quantidade de acertos/tamanho do conjunto
 
     print("Teste "+str(cont+1))
     print("     Tamanho conjunto de teste:", proporcao_conn_teste)
     print("     Acurácia obtida no conjunto de teste %:", acuracia)
-    print("Testes da terceira classe: ")
-    print("Classificação da classe Setosa na versicolor ", versicolor/atributos_setosa.shape[0 * 100], "% ")
-    print("Classificação da classe Setosa na virginica ", virginica/atributos_setosa.shape[0]* 100, "%")    
-    print("==========================================================")
